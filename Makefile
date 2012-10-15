@@ -5,7 +5,7 @@ Cflat.jar: ALWAYS
 	jar cmf manifest.txt Robol.jar *.class
 
 delivery:
-	zip 'INF3110 Oblig1_<$(BRUKER)>.zip' Robol.jar *.pdf
+	zip 'INF3110 Oblig1_<$(BRUKER)>.zip' Robol.jar *.pdf *.java *.txt Makefile
 
 clean:
 	rm -f *.jar
