@@ -5,7 +5,7 @@ public class Size implements Handler {
     
     @Override    
     public void interpret() { 
-        // write the interpret logic here if there is any 
+        // no interpret logic needed 
     } 
  
     public Size(int x_bound, int y_bound){ 

@@ -2,24 +2,16 @@ public enum Direction{
     x, y, minusX, minusY;
         
     public static Direction getDirection(String dir){
-        //System.out.println("DIRECTION: '" + dir.charAt(0) + "'");
-        
         if(dir.charAt(0) == '-'){
-            //System.out.print("MINUS ");
             if(dir.charAt(1) == 'x'){
-                //System.out.println("X");
                 return minusX;
             }else{
-                //System.out.println("Y");
                 return minusY;
             }
         }else{
-            //System.out.print("PLUS ");
             if(dir.charAt(0) == 'x'){
-                //System.out.println("X");
                 return x;
             }else{
-                //System.out.println("Y");
                 return y;
             }
         }

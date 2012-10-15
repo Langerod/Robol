@@ -7,7 +7,7 @@ public class Robot implements Handler {
         
     @Override 
     public void interpret() { 
-        // write the interpret logic here if there is any        
+        // reall dont need any inpterpret logic witht this solution        
     }  
     
     public Robot(){  
@@ -17,13 +17,9 @@ public class Robot implements Handler {
         xPos = x;
         yPos = y;
         direction = dir;
-        
-        //System.out.println(x + " " + y + " " + dir);
     }
     
     public static void move(int distance, Direction dir){
-        
-        //System.out.println("Robot moves " + Direction.directionToString(dir) + " " + distance);
         
         direction = dir;
         switch(dir){
@@ -65,7 +61,6 @@ public class Robot implements Handler {
         xPos = x;
         yPos = y;
         direction = dir;
-        //System.out.println(x + " " + y + " " + dir);
     }
     
     public static int getYPos(){

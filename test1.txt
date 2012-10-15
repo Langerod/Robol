@@ -1,0 +1,9 @@
+size(64*64)
+start(23,30, -x)
+forward(15)
+down
+left(15)
+right(2+3)
+up
+backward(10 + 27)
+stop

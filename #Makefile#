@@ -13,13 +13,6 @@ clean:
 	rm -f *~
 	rm -f *.class
 
-run:
-	java -jar Robol.jar
 
-test:
-	java -jar Robol.jar test1.txt
-	java -jar Robol.jar test2.txt	
-	java -jar Robol.jar test3.txt
-	java -jar Robol.jar test4.txt
 
 ALWAYS:

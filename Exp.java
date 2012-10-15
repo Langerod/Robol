@@ -1,6 +1,6 @@
 public class Exp implements Handler{
     
-    private Identifier id = null;
+    private String id = null;
     private Numbers nr = null;
     private Exp exp = null;
     private PlusExp pExp = null;
@@ -13,8 +13,7 @@ public class Exp implements Handler{
     @Override
     public void interpret(){
         if(id != null){
-            id.interpret();
-            value = id.getValue();
+            value = Program.getExpFromIdentifier(id).getValue();
         }else if(nr != null){
             nr.interpret();
             value = nr.getValue();
@@ -32,13 +31,9 @@ public class Exp implements Handler{
             bExp.interpret();
             bValue = bExp.getValue();
         }
-        
-        //test
-        //System.out.println("Exp: " + (hasNumber() ? value : bValue));
-        //end-test
     }
     
-    public Exp(Identifier id){
+    public Exp(String id){
         this.id = id;
     }
     
@@ -53,7 +48,7 @@ public class Exp implements Handler{
     public Exp(BooleanExp bExp){
         this.bExp = bExp;
     }
-    
+
     public int getValue(){
         return value;
     }
@@ -64,7 +59,5 @@ public class Exp implements Handler{
     
     public boolean hasNumber(){
         return (value != Integer.MIN_VALUE);
-    }
-    
-    
+    }   
 }

@@ -1,0 +1,16 @@
+size(64*64)
+var i = 5
+var j = 3
+start(23,6, -x)
+forward(3*i)
+down
+right(15)
+left(4)
+up
+backward(2*i + 3*j + 5)
+while(j>0)
+{
+right(j)
+j = j -1
+}
+stop

@@ -8,7 +8,7 @@ public class Program implements Handler{
     private Grid grid; 
     private Robot robot;
     private LinkedList<Stmt> stmts;
-    private static HashMap<String, Identifier> ids;
+    private static HashMap<String, Exp> ids;
     private String file;
     
     private IfThenElse ifThenElse;
@@ -19,10 +19,11 @@ public class Program implements Handler{
     private Scanner sc;
     private String line;
     
+    private boolean done;
+    
     @Override 
     public void interpret() {
-        
-        
+
         try{           
             if(file == null){
                 sc = new Scanner(System.in);
@@ -36,8 +37,7 @@ public class Program implements Handler{
             
             line = sc.nextLine().toLowerCase();
             if(line.startsWith("size")){
-                addGrid(new Grid(new Size(Integer.parseInt(line.substring(5,line.indexOf("*"))),
-                                          Integer.parseInt(line.substring(line.indexOf("*") + 1, line.indexOf(")"))))));
+                addGrid(new Grid(new Size(Integer.parseInt(line.substring(5,line.indexOf("*"))), Integer.parseInt(line.substring(line.indexOf("*") + 1, line.indexOf(")"))))));
             }else{
                 System.err.println("ERROR: Input didn't start with size(%*%)");
                 System.exit(1);
@@ -50,33 +50,34 @@ public class Program implements Handler{
                     System.out.println(line);
                 }
                 
-                interpretStmt(line); 
-                
-                
-            }while(!line.equals("stop"));
+                interpretStmt(line);
+            }while(!line.equals("stop") && !done);
         }catch(Exception e){
             System.err.println("ERROR: An error occured during the input from "
                                + ((file == null) ? " System.in." : (file + ".")));
             e.printStackTrace();
             System.exit(1);
         }
-           
-        
+
         for(Stmt s : stmts){
             s.interpret();
         } 
     }
     
     private void interpretStmt(String line) throws Exception{
-        
+               
         String[] varID = line.split(" ");
-        
+              
         if(line.equals("}")){
             if(inElse){
                 inElse = false;
+            }else if((line = sc.nextLine()).equals("else")){
+                interpretStmt(line);
+            }else{
+                ifThenElse = null;
+                whileStmt = null;
+                interpretStmt(line);
             }
-            ifThenElse = null;
-            whileStmt = null;
         }else if(line.startsWith("start")){
             String[] args = line.substring(6, line.length() - 1).split(",");
             for(int i = 0; i < args.length; i++){
@@ -87,18 +88,19 @@ public class Program implements Handler{
                               new Exp(new Numbers(Integer.parseInt(args[1]))),
                               Direction.getDirection(args[2])));
         }else if(line.startsWith("forward")){
-            addStmt(new Forward(expFromLine(line)));
+            addStmt(new Forward(expFromLine(line.substring(7))));
         }else if(line.startsWith("backward")){
-            addStmt(new Backward(expFromLine(line)));
+            addStmt(new Backward(expFromLine(line.substring(8))));
         }else if(line.startsWith("left")){
-            addStmt(new Left(expFromLine(line)));
+            addStmt(new Left(expFromLine(line.substring(4))));
         }else if(line.startsWith("right")){
-            addStmt(new Right(expFromLine(line)));
+            addStmt(new Right(expFromLine(line.substring(5))));
         }else if(line.startsWith("var")){
             String[] var = line.split(" ");
-            addIdentifier(new Identifier(var[1], expFromLine(line.substring(line.indexOf("=") + 1))));
+            new VarDecl(var[1], expFromLine(line.substring(line.indexOf("=") + 1))).interpret();
         }else if(line.startsWith("stop")){
             addStmt(new Stop());
+            done = true;
         }else if(line.startsWith("down")){
 
         }else if(line.startsWith("up")){
@@ -121,14 +123,14 @@ public class Program implements Handler{
             addStmt(tmp);
             whileStmt = tmp;
             sc.nextLine();
-        }else if(ids.get(varID[0]) != null){
-            ids.get(varID[0]).setExp(expFromLine(line.substring(line.indexOf(" ")+1)));
+        }else if(line.contains("=")){
+            Assignment ass = new Assignment(varID[0],
+                                            expFromLine(line.substring(line.indexOf("=") + 1)));
+            addStmt(ass);
         }else{
             System.err.println("ERROR: Unknown command '" + line + "'.");
             System.exit(1);
         }
-        
-        
     }
                 
     private BooleanExp bExpFromLine(String line){
@@ -164,9 +166,7 @@ public class Program implements Handler{
         
         String[] plusMin;
         String[] args1;
-        
-        //System.out.println("expFromLine(line): '"+line+"'");
-        
+                
         if(line.contains("+") || line.contains("-")){
             if(line.contains("(")){
                 args1 = line.substring(line.indexOf("(") + 1, line.indexOf(")")).split("[+-]");
@@ -180,20 +180,7 @@ public class Program implements Handler{
                 args1 = new String[]{line.trim()}; 
             }             
         }
-        /*
-        System.out.println("expFromLine(line): '"+line+"'");
-        
-        
-        try{
-            System.out.println("args1.length = " + args1.length);
-            System.out.println("args1[0] = " + args1[0]);
-            System.out.println("args1[1] = " + args1[1]);
-            System.out.println("args1[2] = " + args1[2]);
-            System.out.println("args1[3] = " + args1[3]);
-        }catch(Exception e){
-            
-        }*/
-        
+               
         int occ = 0;
         char[] chars = line.toCharArray();
         for(int i = 0; i < chars.length; i++){
@@ -202,40 +189,22 @@ public class Program implements Handler{
             }
         }
         
-
-        //System.out.println("expFromLine(line): '"+line+"'");
-
-
         plusMin = new String[occ];
         for(int i = 0; i < occ; i ++){
             plusMin[i] = "" + chars[i];
         }
         
-        //System.out.println("expFromLine(line): '"+line+"'");
-        
-        //System.out.println("args1["+0+"] = '"+ args1[0] + "'");
         for(int i = 0; i < args1.length; i++){
             args1[i] = args1[i].trim();
         }
-        //System.out.println("args1["+0+"] = '"+ args1[0] + "'");
-        
+             
         String[][] args2 = new String[args1.length][];
         for(int i = 0; i < args2.length; i++){
-            //System.out.println("args1["+i+"] = '"+ args1[i] + "'");
             if(args1[i].contains("*")){
                 args2[i] = args1[i].split("[*]");
             }else{
                 args2[i] = new String[]{args1[i]};
             }
-            /*try{
-                System.out.println("args2[i].length = " + args2[i].length);
-                System.out.println("args2[i][0] = " + args2[i][0]);
-                System.out.println("args2[i][1] = " + args2[i][1]);
-                System.out.println("args2[i][2] = " + args2[i][2]);
-                System.out.println("args2[i][3] = " + args2[i][3]);
-            }catch(Exception e){
-
-            }*/
         }
         
         
@@ -244,15 +213,14 @@ public class Program implements Handler{
         if(isNumeric(args2[0][0])){
             exp = new Exp(new Numbers(Integer.parseInt(args2[0][0])));
         }else{
-            exp = new Exp(ids.get(args2[0][0]));
-            //System.out.println("GET FROM IDS:"+ids.get(args2[0][0]));
+            exp = new Exp(args2[0][0]);
         }
         
         for(int j = 1; j < args2[0].length; j++){
             if(isNumeric(args2[0][j])){
                 exp = new Exp(new PlusExp(exp, "*", new Exp(new Numbers(Integer.parseInt(args2[0][j])))));
             }else{
-                exp = new Exp(new PlusExp(exp, "*", new Exp(ids.get(args2[0][j]))));
+                exp = new Exp(new PlusExp(exp, "*", new Exp(args2[0][j])));
             }
         }
         
@@ -261,7 +229,7 @@ public class Program implements Handler{
             if(isNumeric(args2[i][0])){
                 tmpExp = new Exp(new Numbers(Integer.parseInt(args2[i][0])));
             }else{
-                tmpExp = new Exp(ids.get(args2[i][0]));
+                tmpExp = new Exp(args2[i][0]);
             }
             for(int j = 1; j < args2[i].length; j++){
                 if(isNumeric(args2[i][j])){
@@ -269,14 +237,11 @@ public class Program implements Handler{
                                                  "*",
                                                  new Exp(new Numbers(Integer.parseInt(args2[i][j]))))); 
                 }else{
-                    tmpExp = new Exp(new PlusExp(tmpExp, "*" ,new Exp(ids.get(args2[i][j])))); 
+                    tmpExp = new Exp(new PlusExp(tmpExp, "*" ,new Exp(args2[i][j]))); 
                 }
             }
             exp = new Exp(new PlusExp(exp, plusMin[i-1], tmpExp));
         }
-        
-        //exp.interpret();
-        //System.out.println("exp from expmethod: "+ exp.getValue());
         
         return exp;
     }
@@ -296,10 +261,11 @@ public class Program implements Handler{
         robot = new Robot();
         grid = new Grid();
         robot.addGrid(grid);
-        ids = new HashMap<String, Identifier>();
+        ids = new HashMap<String, Exp>();
         ifThenElse = null;
         inElse = false;
         whileStmt = null;
+        done = false;
     }
     
     public Program(String file){
@@ -308,10 +274,19 @@ public class Program implements Handler{
         robot = new Robot();
         grid = new Grid();
         robot.addGrid(grid);
-        ids = new HashMap<String, Identifier>();
+        ids = new HashMap<String, Exp>();
         ifThenElse = null;
         inElse = false;
         whileStmt = null;
+        done = false;
+    }
+    
+    public static void main(String[] args){
+        if(args.length == 1){
+            new Program(args[0]).interpret();
+        }else{
+            new Program().interpret();
+        }
     }
   
     public void addGrid(Grid grid_ins){ 
@@ -337,24 +312,20 @@ public class Program implements Handler{
         }
     }
     
-    public static void addIdentifier(Identifier id){
-        if(ids.put(id.getName(), id) != null){
+    public static void addIdentifier(String id, Exp exp){
+        if(ids.put(id, exp) != null){
             System.err.println("ERROR: Can't declare two variables with "
-                                 + "same identifier ("+id.getName()+").");
+                                 + "same identifier ("+id+").");
             System.exit(1);
         }
     }
     
-    public static void changeIdentifier(String name, Exp exp){
-        Identifier id = ids.get(name);
-        
-        if(id != null){
-            id.setExp(exp);
-        }else{
-            System.err.println("ERROR: Variable '" + name + "' not "
-                                 + "initialized. Can't change value");
-            System.exit(1);
-        }
+    public static void changeIdentifier(String id, Exp exp){
+        ids.put(id, exp);        
+    }
+    
+    public static Exp getExpFromIdentifier(String id){
+        return ids.get(id);
     }
            
            

@@ -9,11 +9,13 @@ public class BooleanExp implements Handler{
         this.exp1 = exp1;
         this.operator = operator;
         this.exp2 = exp2;
-        interpret();
     }
     
     @Override 
-    public void interpret() { 
+    public void interpret() {
+        exp1.interpret();
+        exp2.interpret();
+        
         if(operator.equals(">")){
             value = (exp1.getValue() - exp2.getValue()) > 0;
         }else if(operator.equals("<")){

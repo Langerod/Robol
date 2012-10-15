@@ -2,7 +2,7 @@ public abstract class Move implements Stmt {
     
     private Exp exp;
     
-    public void interpret() { 
+    public void interpret() {
         exp.interpret(); 
         move();
     } 
