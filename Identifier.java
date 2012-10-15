@@ -1,30 +1,32 @@
 public class Identifier implements Handler,Comparable<Identifier> { 
     
     private String id;
-    private int value;
+    private Exp exp;
     
     @Override 
-    public void interpret() { 
-        // write the interpret logic here if there is any 
+    public void interpret() {
+        exp.interpret();       
     }
     
     public Identifier(String id){
         this.id = id;
     }
     
-    public Identifier(String id, int value){
+    public Identifier(String id, Exp exp){
         this.id = id;
-        this.value = value;
+        this.exp = exp;
     }
     
-    public void setValue(int value){
-        this.value = value;
+    public void setExp(Exp exp){
+        exp.interpret();
+        this.exp = exp;
+        System.out.println(id + " = " + exp.getValue());
     }
     
     public int getValue(){
-        return value;
+        return exp.getValue();
     }
-    
+        
     public String getName(){
         return id;
     }
@@ -32,5 +34,5 @@ public class Identifier implements Handler,Comparable<Identifier> {
     public int compareTo(Identifier id){
         return this.id.compareTo(id.getName());
     }
-        
+           
 } 

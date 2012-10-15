@@ -9,7 +9,7 @@ public class Start implements Stmt{
         x.interpret();
         y.interpret();
         Robot.setPosAndDir(x.getValue(), y.getValue(), dir);
-        System.out.println("Interpret:START: " + x.getValue() + " " + y.getValue() + " " +dir);
+        //System.out.println("Interpret:START: " + x.getValue() + " " + y.getValue() + " " +dir);
     }
     
     public Start(Exp x, Exp y, Direction dir){

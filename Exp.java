@@ -34,7 +34,7 @@ public class Exp implements Handler{
         }
         
         //test
-        System.out.println("Exp: " + (hasNumber() ? value : bValue));
+        //System.out.println("Exp: " + (hasNumber() ? value : bValue));
         //end-test
     }
     

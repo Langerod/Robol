@@ -5,7 +5,7 @@ public class Left extends Move implements Handler {
     } 
 
     public void move(){
-        System.out.println("Move: left");
+        //System.out.println("Move: left");
         Robot.move(getValue(), Direction.getNewDirection(Robot.getDirection(), "left"));
     }
     

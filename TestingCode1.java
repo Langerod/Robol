@@ -3,6 +3,7 @@ public class TestingCode1 {
     public static void main(String[] args){
         Program pro_inst = new Program();
         
+        /*
         //grid(64,64)
         pro_inst.addGrid(new Grid (new Size(64,64))); 
         //start(23,30,-x)
@@ -16,7 +17,7 @@ public class TestingCode1 {
         //backward(10+27)
         pro_inst.addStmt(new Backward(new Exp(new PlusExp(new Exp(new Numbers(10)), "+", new Exp(new Numbers(27))))));
         //stop
-        pro_inst.addStmt(new Stop());
+        pro_inst.addStmt(new Stop());*/
         pro_inst.interpret();
     } 
 } 

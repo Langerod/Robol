@@ -18,12 +18,12 @@ public class Robot implements Handler {
         yPos = y;
         direction = dir;
         
-        System.out.println(x + " " + y + " " + dir);
+        //System.out.println(x + " " + y + " " + dir);
     }
     
     public static void move(int distance, Direction dir){
         
-        System.out.println("Robot moves " + Direction.directionToString(dir) + " " + distance);
+        //System.out.println("Robot moves " + Direction.directionToString(dir) + " " + distance);
         
         direction = dir;
         switch(dir){
@@ -65,7 +65,7 @@ public class Robot implements Handler {
         xPos = x;
         yPos = y;
         direction = dir;
-        System.out.println(x + " " + y + " " + dir);
+        //System.out.println(x + " " + y + " " + dir);
     }
     
     public static int getYPos(){

@@ -5,7 +5,7 @@ public class Forward extends Move implements Handler {
     } 
     
     public void move(){
-        System.out.println("Move: forward(" + getValue() + ")");
+        //System.out.println("Move: forward(" + getValue() + ")");
         Robot.move(getValue(), Robot.getDirection());
     }
 } 
