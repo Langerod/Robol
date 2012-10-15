@@ -7,6 +7,9 @@ public class PlusExp implements Handler{
     
     @Override 
     public void interpret() { 
+        exp1.interpret();
+        exp2.interpret();
+        
         if(operator.equals("+")){
             value = exp1.getValue() + exp2.getValue();
         }else if(operator.equals("-")){
@@ -22,8 +25,7 @@ public class PlusExp implements Handler{
     public PlusExp(Exp exp1, String operator, Exp exp2){
         this.exp1 = exp1;
         this.operator = operator;
-        this.exp2 = exp2;
-        interpret();
+        this.exp2 = exp2;        
     }
     
     public int getValue(){

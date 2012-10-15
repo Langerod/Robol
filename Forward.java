@@ -2,10 +2,10 @@ public class Forward extends Move implements Handler {
      
     public Forward(Exp i){
         super(i);
-        interpret(); 
     } 
     
-    public void interpret() { 
-        // write the interpret logic here 
+    public void move(){
+        System.out.println("Move: forward(" + getValue() + ")");
+        Robot.move(getValue(), Robot.getDirection());
     }
 } 

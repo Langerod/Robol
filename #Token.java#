@@ -1,0 +1,118 @@
+public enum Token { 
+    
+    move, 
+    
+
+    public static boolean isStmt(Object o) {
+        return ;
+    }
+    
+    
+    /**
+     * Takes a string and and returns the token that matches the string
+     * This method will not work in Java 6, because the switch statement
+     * uses Strings, for convenient reasons.
+     *
+     * @param String s - The textural representation of a token
+     * @return Token - The coresponding token to the string
+     */
+    public static Token getToken(Object o){
+        
+        if(s == null || s == ""){
+            return null;
+        }
+        
+        if(s.charAt(0) == 39 && s.charAt(2) == 39){
+            return numberToken;
+        }
+        
+        switch(s){
+        case "," : return commaToken;
+        case "/" : return divideToken;
+        case "double" : return doubleToken;
+        case "==" : return equalToken;
+        case "for" : return forToken;
+        case ">=" : return greaterEqualToken;
+        case ">" : return greaterToken;
+        case "if" : return ifToken;
+        case "int" : return intToken;
+        case "[" : return leftBracketToken;
+        case "{" : return leftCurlToken;
+        case "(" : return leftParToken;
+        case "<=" : return lessEqualToken;
+        case "<" : return lessToken;
+        case "*" : return multiplyToken;
+        case "!=" : return notEqualToken;
+        case "=" : return assignToken;
+        case "]" : return rightBracketToken;
+        case "}" : return rightCurlToken;
+        case ")" : return rightParToken;
+        case "return" : return returnToken;
+        case ";" : return semicolonToken;
+        case "-" : return subtractToken;
+        case "+" : return addToken;
+        case "while" : return whileToken;
+        default :
+            if(Scanner.isNumeric(s.charAt(0))){
+                checkNumberToken(s);
+                return numberToken;
+            }else{
+                checkNameToken(s);
+                return nameToken;
+            }
+            
+        }
+    }
+    
+    /**
+     * Takes a string and checks wherever the string
+     * can be considered a valid number token.
+     */
+    private static void checkNumberToken(String s){
+        try{
+            Double.parseDouble(s);
+        }catch(NumberFormatException e){
+            Error.error(Scanner.nextNextLine, "Illegal  symbol: '" + s + "'!");
+        }
+    }
+    
+    
+    /**
+     * Takes a string and checks wherever the string
+     * can be considered a valid name token.
+     */
+    private static void checkNameToken(String s){
+        if(!Scanner.isLetterAZ(s.charAt(0))){
+            Error.error(Scanner.nextNextLine,
+                        "Illegal  symbol: '" + s + "'!");
+        }
+        
+        for(int i = 1; i < s.length(); i++){
+            if(!Scanner.isLetterAZ(s.charAt(i))
+               && !Scanner.isNumeric(s.charAt(i))
+               && s.charAt(i) != '_'){
+                Error.error(Scanner.nextNextLine,
+                            "Illegal  symbol: '" + s + "'!");
+            }
+        }
+    }
+    
+    
+    /**
+     * Check if a character is a token.
+     *
+     * This is useful for the scanner
+     * - in many cases a token is followed by as single letter token.
+     *
+     * @param char c
+     * @return <code>true</code> if the parameter is a token, else <code>false</code>.
+     */
+    public static boolean isSingleCharToken(char c){   
+        if(c == ';' || c == '(' || c == ')' || c == '[' || c == ']'
+           || c == '{' || c == '}' || c == ',' || c == '*' || c == '/'
+           || c == '<' || c == '>' || c == '-' || c == '+'){
+            return true;
+        }
+        return false;
+    }
+}

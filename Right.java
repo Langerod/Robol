@@ -1,11 +1,11 @@
-public class Right extends Move implements Handler { 
+public class Right extends Move{ 
      
     public Right(Exp i){
         super(i);
-        interpret(); 
     } 
-  
-    public void interpret() { 
-        // write the interpret logic here 
+      
+    public void move(){
+        System.out.println("Move: right");
+        Robot.move(getValue(), Direction.getNewDirection(Robot.getDirection(), "right"));
     }
 } 

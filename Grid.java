@@ -4,17 +4,22 @@ public class Grid implements Handler {
  
     @Override 
     public void interpret() { 
-        // write the interpret logic here if there is any 
-    } 
-  
-    public Grid(){ 
-        
- 
-    } 
- 
+        // no interpret logic needed (yet?)
+    }
+    
+    public Grid(){
+    }
+   
     public Grid(Size size_ins){ 
         size_Global = size_ins; 
     } 
-        
+    
+    public int getXBound(){
+        return size_Global.getXBound();
+    }
+    
+    public int getYBound(){
+        return size_Global.getYBound();
+    }
  
 } 

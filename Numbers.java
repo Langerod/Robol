@@ -4,6 +4,7 @@ public class Numbers implements Handler{
     
     @Override
     public void interpret(){   
+        //no interpret logic needed
     }
     
     public Numbers(int integer){

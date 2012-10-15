@@ -1,1 +1,1 @@
-public interface Stmt{}
+public interface Stmt extends Handler{}

@@ -12,27 +12,46 @@ public class Exp implements Handler{
     
     @Override
     public void interpret(){
-
+        if(id != null){
+            id.interpret();
+            value = id.getValue();
+        }else if(nr != null){
+            nr.interpret();
+            value = nr.getValue();
+        }else if(exp != null){
+            exp.interpret();
+            if(exp.hasNumber()){
+                value = exp.getValue();
+            }else{
+                bValue = exp.getBoolean();
+            }
+        }else if(pExp != null){
+            pExp.interpret();
+            value = pExp.getValue();
+        }else{
+            bExp.interpret();
+            bValue = bExp.getValue();
+        }
+        
+        //test
+        System.out.println("Exp: " + (hasNumber() ? value : bValue));
+        //end-test
     }
     
     public Exp(Identifier id){
         this.id = id;
-        value = id.getValue();
     }
     
     public Exp(Numbers nr){
         this.nr = nr;
-        value = nr.getValue();
     }
     
     public Exp(PlusExp pExp){
         this.pExp = pExp;
-        value = pExp.getValue();
     }
     
     public Exp(BooleanExp bExp){
         this.bExp = bExp;
-        bValue = bExp.getValue();
     }
     
     public int getValue(){
